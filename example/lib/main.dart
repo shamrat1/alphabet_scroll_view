@@ -118,8 +118,23 @@ class _MyHomePageState extends State<MyHomePage> {
     'Rozalthiric',
     'Bookman'
   ];
+  Map<String, int> _headers = Map();
 
   int selectedIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    for (var i = 0; i < list.length; i++) {
+      var e = list[i];
+      var k = e[0].toUpperCase();
+      if (!_headers.containsKey(k)) {
+        _headers.addAll({k: i});
+      }
+    }
+    print(_headers);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -133,17 +148,13 @@ class _MyHomePageState extends State<MyHomePage> {
               list: list.map((e) => AlphaModel(e)).toList(),
               // isAlphabetsFiltered: false,
               alignment: LetterAlignment.right,
-              itemExtent: 50,
+              itemExtent: 100,
               unselectedTextStyle: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.normal,
-                color: Colors.black
-              ),
+                  fontSize: 18,
+                  fontWeight: FontWeight.normal,
+                  color: Colors.black),
               selectedTextStyle: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.red
-              ),
+                  fontSize: 20, fontWeight: FontWeight.bold, color: Colors.red),
               overlayWidget: (value) => Stack(
                 alignment: Alignment.center,
                 children: [
@@ -168,22 +179,34 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
               itemBuilder: (_, k, id) {
-                return Padding(
-                  padding: const EdgeInsets.only(right: 20),
-                  child: ListTile(
-                    title: Text('$id'),
-                    subtitle: Text('Secondary text'),
-                    leading: Icon(Icons.person),
-                    trailing: Radio<bool>(
-                      value: false,
-                      groupValue: selectedIndex != k,
-                      onChanged: (value) {
-                        setState(() {
-                          selectedIndex = k;
-                        });
-                      },
+                return Column(
+                  children: [
+                    if (_headers.containsValue(k))
+                      Container(
+                        height: 20,
+                        color: Colors.blue,
+                        child: Center(
+                          child: Text(id[0].toString()),
+                        ),
+                      ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 20),
+                      child: ListTile(
+                        title: Text('$id'),
+                        subtitle: Text('Secondary text'),
+                        leading: Icon(Icons.person),
+                        trailing: Radio<bool>(
+                          value: false,
+                          groupValue: selectedIndex != k,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedIndex = k;
+                            });
+                          },
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 );
               },
             ),

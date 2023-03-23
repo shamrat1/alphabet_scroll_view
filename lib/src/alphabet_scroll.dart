@@ -14,6 +14,7 @@ class AlphabetScrollView extends StatefulWidget {
       required this.selectedTextStyle,
       required this.unselectedTextStyle,
       this.itemExtent = 40,
+      this.headers,
       required this.itemBuilder})
       : super(key: key);
 
@@ -95,6 +96,8 @@ class AlphabetScrollView extends StatefulWidget {
   /// the string mapped to this widget from the ```[list]``` passed.
 
   Widget Function(BuildContext, int, String) itemBuilder;
+
+  List<Widget>? headers;
 
   @override
   _AlphabetScrollViewState createState() => _AlphabetScrollViewState();
