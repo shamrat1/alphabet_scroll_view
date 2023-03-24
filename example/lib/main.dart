@@ -125,9 +125,11 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+    list.sort((x, y) => x.toLowerCase().compareTo(y.toLowerCase()));
     for (var i = 0; i < list.length; i++) {
       var e = list[i];
       var k = e[0].toUpperCase();
+      print(k);
       if (!_headers.containsKey(k)) {
         _headers.addAll({k: i});
       }
@@ -186,7 +188,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         height: 20,
                         color: Colors.blue,
                         child: Center(
-                          child: Text(id[0].toString()),
+                          child: Text(id[0].toUpperCase()),
                         ),
                       ),
                     Padding(

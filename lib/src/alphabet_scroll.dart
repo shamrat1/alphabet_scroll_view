@@ -212,9 +212,10 @@ class _AlphabetScrollViewState extends State<AlphabetScrollView> {
             itemCount: _list.length,
             physics: ClampingScrollPhysics(),
             itemBuilder: (_, x) {
-              return ConstrainedBox(
-                  constraints: BoxConstraints(maxHeight: widget.itemExtent),
-                  child: widget.itemBuilder(_, x, _list[x].key));
+              return widget.itemBuilder(_, x, _list[x].key);
+              // return ConstrainedBox(
+              //     constraints: BoxConstraints(maxHeight: widget.itemExtent),
+              //     child: widget.itemBuilder(_, x, _list[x].key));
             }),
         Align(
           alignment: widget.alignment == LetterAlignment.left
