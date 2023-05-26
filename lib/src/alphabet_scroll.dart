@@ -14,6 +14,7 @@ class AlphabetScrollView extends StatefulWidget {
       required this.selectedTextStyle,
       required this.unselectedTextStyle,
       this.itemExtent = 40,
+      this.hebrewAlphabets = false,
       this.headers,
       required this.itemBuilder})
       : super(key: key);
@@ -34,6 +35,10 @@ class AlphabetScrollView extends StatefulWidget {
   /// ```itemExtent``` specifies the max height of the widget returned by
   /// itemBuilder if not specified defaults to 40.0
   final double itemExtent;
+
+  /// ```itemExtent``` specifies the max height of the widget returned by
+  /// itemBuilder if not specified defaults to 40.0
+  final bool hebrewAlphabets;
 
   /// Alignment for the Alphabet List
   /// can be aligned on either left/right side
@@ -122,7 +127,7 @@ class _AlphabetScrollViewState extends State<AlphabetScrollView> {
       });
       _filteredAlphabets = temp;
     } else {
-      _filteredAlphabets = alphabets;
+      _filteredAlphabets = widget.hebrewAlphabets ? hebrewAlphabets : alphabets;
     }
     calculateFirstIndex();
     setState(() {});
