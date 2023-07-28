@@ -28,6 +28,7 @@ class AlphabetScrollView extends StatefulWidget {
     required this.headerBuilder,
     required this.items,
     required this.headerExtent,
+    this.alphabetPadding,
     // required this.itemBuilder,
   }) : super(key: key);
 
@@ -48,6 +49,7 @@ class AlphabetScrollView extends StatefulWidget {
   /// itemBuilder if not specified defaults to 40.0
   final double itemExtent;
   final double headerExtent;
+  EdgeInsets? alphabetPadding;
 
   /// ```itemExtent``` specifies the max height of the widget returned by
   /// itemBuilder if not specified defaults to 40.0
@@ -210,9 +212,6 @@ class _AlphabetScrollViewState extends State<AlphabetScrollView> {
         (previouseAlphas.length) * widget.headerExtent;
     final scrollToPostion =
         widget.itemExtent * index + previousAlphaHeaderHeight;
-    print("${widget.itemExtent * index} | $scrollToPostion");
-
-    print(previouseAlphas);
     if (index != null) {
       listController.animateTo((scrollToPostion),
           duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
@@ -249,10 +248,6 @@ class _AlphabetScrollViewState extends State<AlphabetScrollView> {
                   widget.items[x],
                 ],
               );
-              // return widget.itemBuilder(_, x, _list[x].key);
-              // // return ConstrainedBox(
-              // //     constraints: BoxConstraints(maxHeight: widget.itemExtent),
-              // //     child: widget.itemBuilder(_, x, _list[x].key));
             }),
         Align(
           alignment: widget.alignment == LetterAlignment.left
@@ -280,12 +275,17 @@ class _AlphabetScrollViewState extends State<AlphabetScrollView> {
                             (x) => GestureDetector(
                               key: x == selected ? letterKey : null,
                               onTap: () {
-                                _selectedIndexNotifier.value = x;
-                                scrolltoIndex(x, positionNotifer.value);
+                                try {
+                                  _selectedIndexNotifier.value = x;
+                                  scrolltoIndex(x, positionNotifer.value);
+                                } catch (e) {
+                                  print(e.toString());
+                                }
                               },
                               child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 2),
+                                padding: widget.alphabetPadding ??
+                                    const EdgeInsets.symmetric(
+                                        horizontal: 13, vertical: 10),
                                 child: Text(
                                   _filteredAlphabets[x].toUpperCase(),
                                   style: selected == x

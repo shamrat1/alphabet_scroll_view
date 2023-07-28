@@ -170,11 +170,11 @@ class _MyHomePageState extends State<MyHomePage> {
               alignment: LetterAlignment.right,
               itemExtent: 80,
               unselectedTextStyle: TextStyle(
-                  fontSize: 18,
+                  fontSize: 11,
                   fontWeight: FontWeight.normal,
                   color: Colors.black),
               selectedTextStyle: TextStyle(
-                  fontSize: 20, fontWeight: FontWeight.bold, color: Colors.red),
+                  fontSize: 15, fontWeight: FontWeight.bold, color: Colors.red),
               overlayWidget: (value) => Stack(
                 alignment: Alignment.center,
                 children: [
