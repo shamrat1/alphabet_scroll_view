@@ -31,8 +31,29 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   void _incrementCounter() {}
-
   List<String> list = [
+    "אביגיל",
+    "יעקב",
+    "מרים",
+    "יוסף",
+    "רחל",
+    "משה",
+    "שרה",
+    "דוד",
+    "אלישבע",
+    "יהושע",
+    "חנה",
+    "יהונתן",
+    "לאה",
+    "שלמה",
+    "דבורה",
+    "נתן",
+    "עדל",
+    "אהרון",
+    "מרגלית",
+    "יצחק"
+  ];
+  List<String> liste = [
     'angel',
     'bubbles',
     'shimmer',
@@ -149,6 +170,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: AlphabetScrollView(
               list: list.map((e) => AlphaModel(e)).toList(),
               headers: _headers,
+              hebrewAlphabets: true,
               headerBuilder: (context, index) {
                 if (_headers.containsValue(index)) {
                   var item =
@@ -166,7 +188,7 @@ class _MyHomePageState extends State<MyHomePage> {
               items: [
                 for (var i = 0; i < list.length; i++) _itemWidget(list[i], i),
               ],
-              // isAlphabetsFiltered: false,
+              isAlphabetsFiltered: false,
               alignment: LetterAlignment.right,
               itemExtent: 80,
               unselectedTextStyle: TextStyle(

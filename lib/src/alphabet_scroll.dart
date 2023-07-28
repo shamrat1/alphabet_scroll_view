@@ -136,13 +136,24 @@ class _AlphabetScrollViewState extends State<AlphabetScrollView> {
     /// filter Out AlphabetList
     if (widget.isAlphabetsFiltered) {
       List<String> temp = [];
-      alphabets.forEach((letter) {
-        AlphaModel? firstAlphabetElement = _list.firstWhereOrNull(
-            (item) => item.key.toLowerCase().startsWith(letter.toLowerCase()));
-        if (firstAlphabetElement != null) {
-          temp.add(letter);
-        }
-      });
+      if (widget.hebrewAlphabets) {
+        hebrewAlphabets.forEach((letter) {
+          AlphaModel? firstAlphabetElement =
+              _list.firstWhereOrNull((item) => item.key.startsWith(letter));
+          if (firstAlphabetElement != null) {
+            temp.add(letter);
+          }
+        });
+      } else {
+        alphabets.forEach((letter) {
+          AlphaModel? firstAlphabetElement = _list.firstWhereOrNull((item) =>
+              item.key.toLowerCase().startsWith(letter.toLowerCase()));
+          if (firstAlphabetElement != null) {
+            temp.add(letter);
+          }
+        });
+      }
+
       _filteredAlphabets = temp;
     } else {
       _filteredAlphabets = widget.hebrewAlphabets ? hebrewAlphabets : alphabets;
@@ -204,24 +215,26 @@ class _AlphabetScrollViewState extends State<AlphabetScrollView> {
   }
 
   void scrolltoIndex(int x, Offset offset) {
-    int index = firstIndexPosition[_filteredAlphabets[x].toLowerCase()]!;
-    var previouseAlphas = _filteredAlphabets
-        .take(_filteredAlphabets.indexOf(_filteredAlphabets[x]))
-        .toList();
-    print({
-      "previous alpha": previouseAlphas,
-    });
-    final previousAlphaHeaderHeight =
-        (previouseAlphas.length) * widget.headerExtent;
-    print({
-      "previous alpha header height": previousAlphaHeaderHeight,
-    });
-    final scrollToPostion =
-        widget.itemExtent * index + previousAlphaHeaderHeight;
-    print({
-      "scroll to position": scrollToPostion,
-    });
+    var index = firstIndexPosition[_filteredAlphabets[x]];
+    print(firstIndexPosition);
+    print(_filteredAlphabets[x]);
     if (index != null) {
+      var previouseAlphas = _filteredAlphabets
+          .take(_filteredAlphabets.indexOf(_filteredAlphabets[x]))
+          .toList();
+      print({
+        "previous alpha": previouseAlphas,
+      });
+      final previousAlphaHeaderHeight =
+          (previouseAlphas.length) * widget.headerExtent;
+      print({
+        "previous alpha header height": previousAlphaHeaderHeight,
+      });
+      final scrollToPostion =
+          widget.itemExtent * index + previousAlphaHeaderHeight;
+      print({
+        "scroll to position": scrollToPostion,
+      });
       listController.animateTo((scrollToPostion),
           duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
     }
