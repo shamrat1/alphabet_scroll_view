@@ -4,20 +4,32 @@ import 'package:flutter/material.dart';
 
 enum LetterAlignment { left, right }
 
+class HeaderWidget extends StatelessWidget {
+  const HeaderWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
+
 class AlphabetScrollView extends StatefulWidget {
-  AlphabetScrollView(
-      {Key? key,
-      required this.list,
-      this.alignment = LetterAlignment.right,
-      this.isAlphabetsFiltered = true,
-      this.overlayWidget,
-      required this.selectedTextStyle,
-      required this.unselectedTextStyle,
-      this.itemExtent = 40,
-      this.hebrewAlphabets = false,
-      this.headers,
-      required this.itemBuilder})
-      : super(key: key);
+  AlphabetScrollView({
+    Key? key,
+    required this.list,
+    this.alignment = LetterAlignment.right,
+    this.isAlphabetsFiltered = true,
+    this.overlayWidget,
+    required this.selectedTextStyle,
+    required this.unselectedTextStyle,
+    this.itemExtent = 40,
+    this.hebrewAlphabets = false,
+    required this.headers,
+    required this.headerBuilder,
+    required this.items,
+    required this.headerExtent,
+    // required this.itemBuilder,
+  }) : super(key: key);
 
   /// List of Items should be non Empty
   /// and you must map your
@@ -35,10 +47,13 @@ class AlphabetScrollView extends StatefulWidget {
   /// ```itemExtent``` specifies the max height of the widget returned by
   /// itemBuilder if not specified defaults to 40.0
   final double itemExtent;
+  final double headerExtent;
 
   /// ```itemExtent``` specifies the max height of the widget returned by
   /// itemBuilder if not specified defaults to 40.0
   final bool hebrewAlphabets;
+
+  final Map<String, int> headers;
 
   /// Alignment for the Alphabet List
   /// can be aligned on either left/right side
@@ -100,9 +115,10 @@ class AlphabetScrollView extends StatefulWidget {
   /// The itemBuilder must return a non-null widget and the third paramter id specifies
   /// the string mapped to this widget from the ```[list]``` passed.
 
-  Widget Function(BuildContext, int, String) itemBuilder;
+  // Widget Function(BuildContext, int, String) itemBuilder;
 
-  List<Widget>? headers;
+  List<Widget> items;
+  Widget? Function(BuildContext, int) headerBuilder;
 
   @override
   _AlphabetScrollViewState createState() => _AlphabetScrollViewState();
@@ -187,7 +203,15 @@ class _AlphabetScrollViewState extends State<AlphabetScrollView> {
 
   void scrolltoIndex(int x, Offset offset) {
     int index = firstIndexPosition[_filteredAlphabets[x].toLowerCase()]!;
-    final scrollToPostion = widget.itemExtent * index;
+    var previouseAlphas = _filteredAlphabets
+        .take(_filteredAlphabets.indexOf(_filteredAlphabets[x]))
+        .toList();
+    final previousAlphaHeaderHeight = (previouseAlphas.length) * 20;
+    final scrollToPostion =
+        widget.itemExtent * index + previousAlphaHeaderHeight;
+    print("${widget.itemExtent * index} | $scrollToPostion");
+
+    print(previouseAlphas);
     if (index != null) {
       listController.animateTo((scrollToPostion),
           duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
@@ -217,10 +241,17 @@ class _AlphabetScrollViewState extends State<AlphabetScrollView> {
             itemCount: _list.length,
             physics: ClampingScrollPhysics(),
             itemBuilder: (_, x) {
-              return widget.itemBuilder(_, x, _list[x].key);
-              // return ConstrainedBox(
-              //     constraints: BoxConstraints(maxHeight: widget.itemExtent),
-              //     child: widget.itemBuilder(_, x, _list[x].key));
+              var header = widget.headerBuilder(context, x);
+              return Column(
+                children: [
+                  if (header != null) header,
+                  widget.items[x],
+                ],
+              );
+              // return widget.itemBuilder(_, x, _list[x].key);
+              // // return ConstrainedBox(
+              // //     constraints: BoxConstraints(maxHeight: widget.itemExtent),
+              // //     child: widget.itemBuilder(_, x, _list[x].key));
             }),
         Align(
           alignment: widget.alignment == LetterAlignment.left

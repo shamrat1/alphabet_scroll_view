@@ -148,9 +148,27 @@ class _MyHomePageState extends State<MyHomePage> {
           Expanded(
             child: AlphabetScrollView(
               list: list.map((e) => AlphaModel(e)).toList(),
+              headers: _headers,
+              headerBuilder: (context, index) {
+                if (_headers.containsValue(index)) {
+                  var item =
+                      _headers.entries.where((e) => e.value == index).first;
+                  return Container(
+                    height: 20,
+                    color: Colors.blue,
+                    child: Center(
+                      child: Text(item.key),
+                    ),
+                  );
+                }
+                return null;
+              },
+              items: [
+                for (var i = 0; i < list.length; i++) _itemWidget(list[i], i),
+              ],
               // isAlphabetsFiltered: false,
               alignment: LetterAlignment.right,
-              itemExtent: 100,
+              itemExtent: 80,
               unselectedTextStyle: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.normal,
@@ -180,37 +198,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ],
               ),
-              itemBuilder: (_, k, id) {
-                return Column(
-                  children: [
-                    if (_headers.containsValue(k))
-                      Container(
-                        height: 20,
-                        color: Colors.blue,
-                        child: Center(
-                          child: Text(id[0].toUpperCase()),
-                        ),
-                      ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 20),
-                      child: ListTile(
-                        title: Text('$id'),
-                        subtitle: Text('Secondary text'),
-                        leading: Icon(Icons.person),
-                        trailing: Radio<bool>(
-                          value: false,
-                          groupValue: selectedIndex != k,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedIndex = k;
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              },
             ),
           )
         ],
@@ -224,6 +211,30 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Icon(Icons.add),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _itemWidget(String id, int k) {
+    return Container(
+      height: 80,
+      child: Padding(
+        padding: const EdgeInsets.only(right: 40, left: 20),
+        child: ListTile(
+          shape: RoundedRectangleBorder(side: BorderSide()),
+          title: Text('$id'),
+          subtitle: Text('Secondary text'),
+          leading: Icon(Icons.person),
+          trailing: Radio<bool>(
+            value: false,
+            groupValue: selectedIndex != k,
+            onChanged: (value) {
+              setState(() {
+                selectedIndex = k;
+              });
+            },
+          ),
+        ),
       ),
     );
   }
