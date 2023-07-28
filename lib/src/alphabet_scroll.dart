@@ -208,10 +208,19 @@ class _AlphabetScrollViewState extends State<AlphabetScrollView> {
     var previouseAlphas = _filteredAlphabets
         .take(_filteredAlphabets.indexOf(_filteredAlphabets[x]))
         .toList();
+    print({
+      "previous alpha": previouseAlphas,
+    });
     final previousAlphaHeaderHeight =
         (previouseAlphas.length) * widget.headerExtent;
+    print({
+      "previous alpha header height": previousAlphaHeaderHeight,
+    });
     final scrollToPostion =
         widget.itemExtent * index + previousAlphaHeaderHeight;
+    print({
+      "scroll to position": scrollToPostion,
+    });
     if (index != null) {
       listController.animateTo((scrollToPostion),
           duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
