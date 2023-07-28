@@ -206,7 +206,8 @@ class _AlphabetScrollViewState extends State<AlphabetScrollView> {
     var previouseAlphas = _filteredAlphabets
         .take(_filteredAlphabets.indexOf(_filteredAlphabets[x]))
         .toList();
-    final previousAlphaHeaderHeight = (previouseAlphas.length) * 20;
+    final previousAlphaHeaderHeight =
+        (previouseAlphas.length) * widget.headerExtent;
     final scrollToPostion =
         widget.itemExtent * index + previousAlphaHeaderHeight;
     print("${widget.itemExtent * index} | $scrollToPostion");
